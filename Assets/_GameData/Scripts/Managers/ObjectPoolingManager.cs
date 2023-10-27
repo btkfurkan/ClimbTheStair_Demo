@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 
@@ -17,45 +18,16 @@ public class ObjectPoolingManager : MonoBehaviour
     private List<GameObject> _scoreHandle = new List<GameObject>();
     private List<GameObject> _stairs = new List<GameObject>();
 
-    void Start()
+    private void Start()
     {
-        for (int i = 0; i < StairCount; i++)
-        {
-            GameObject stair = Instantiate(StairPrefab, transform);
-            stair.SetActive(false);
-            _stairs.Add(stair);
-        }
-
-        for (int i = 0; i < ScoreHandleCount; i++)
-        {
-            GameObject handle = Instantiate(ScoreHandlePrefab, transform);
-            handle.SetActive(false);
-            _scoreHandle.Add(handle);
-        }
+        CreateObjects(ScoreHandlePrefab, transform, ScoreHandleCount, _scoreHandle);
+        CreateObjects(StairPrefab, transform, StairCount, _stairs);
     }
-
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            for (int i = 0; i < _stairs.Count; i++)
-            {
-                if (!_stairs[i].activeInHierarchy)
-                {
-                    float angle = i * (360f / _stairs.Count);
-                    Vector3 offset = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-
-
-                    Vector3 stairPosition = transform.position + offset * CircleRadius;
-                    stairPosition.y = i * StairHight;
-
-                    _stairs[i].transform.position = stairPosition;
-                    _stairs[i].transform.rotation = Quaternion.LookRotation(offset);
-                    _stairs[i].SetActive(true);
-                    _stairs[i].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InElastic).OnComplete(() => { _stairs[i].GetComponent<BoxCollider>().enabled = true; });
-                    break;
-                }
-            }
+            ActivateNextAvailableStair();
 
             for (int h = 0; h < _scoreHandle.Count; h++)
             {
@@ -68,7 +40,63 @@ public class ObjectPoolingManager : MonoBehaviour
                     break;
                 }
             }
-
         }
+    }
+    private void CreateObjects(GameObject prefab, Transform transform, int prefabCount, List<GameObject> prefabList)
+    {
+        for (int i = 0; i < prefabCount; i++)
+        {
+            GameObject obj = Instantiate(prefab, transform);
+            obj.SetActive(false);
+            prefabList.Add(obj);
+        }
+    }
+    private void ActivateNextAvailableStair()
+    {
+        for (int i = 0; i < _stairs.Count; i++)
+        {
+            if (!_stairs[i].activeInHierarchy)
+            {
+                StairPositionAndRotationUpdate(i);
+                StairSetActive(i, true);
+                StairAnimation(i);
+                break;
+            }
+        }
+    }
+    private void StairPositionAndRotationUpdate(int index)
+    {
+        float angle = StairCalculateAngle(index);
+        Vector3 offset = StairCalculateOffset(angle);
+        Vector3 stairPosition = StairCalculatePosition(index, offset);
+        StairSetTransform(index, stairPosition, offset);
+    }
+    private float StairCalculateAngle(int index)
+    {
+        return index * (360f / _stairs.Count);
+    }
+    private Vector3 StairCalculateOffset(float angle)
+    {
+        return Quaternion.Euler(0, angle, 0) * Vector3.forward;
+    }
+    private Vector3 StairCalculatePosition(int index, Vector3 offset)
+    {
+        Vector3 stairPosition = transform.position + offset * CircleRadius;
+        stairPosition.y = index * StairHight;
+        return stairPosition;
+    }
+    private void StairSetTransform(int index, Vector3 position, Vector3 offset)
+    {
+        Transform stairTransform = _stairs[index].transform;
+        stairTransform.position = position;
+        stairTransform.rotation = Quaternion.LookRotation(offset);
+    }
+    private void StairAnimation(int index)
+    {
+        _stairs[index].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InElastic).OnComplete(() => { _stairs[index].GetComponent<BoxCollider>().enabled = true; });
+    }
+    private void StairSetActive(int index, bool setActive)
+    {
+        _stairs[index].SetActive(setActive);
     }
 }
