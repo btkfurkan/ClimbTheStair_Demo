@@ -1,9 +1,6 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
-
 
 public class ObjectPoolingManager : MonoBehaviour
 {
@@ -15,33 +12,23 @@ public class ObjectPoolingManager : MonoBehaviour
     public float StairHight = 0.2f;
     public float CircleRadius = 10f;
 
-    private List<GameObject> _scoreHandle = new List<GameObject>();
-    private List<GameObject> _stairs = new List<GameObject>();
+    private List<GameObject> _scoreHandleList = new List<GameObject>();
+    private List<GameObject> _stairsList = new List<GameObject>();
 
     private void Start()
     {
-        CreateObjects(ScoreHandlePrefab, transform, ScoreHandleCount, _scoreHandle);
-        CreateObjects(StairPrefab, transform, StairCount, _stairs);
+        CreateObjects(ScoreHandlePrefab, transform, ScoreHandleCount, _scoreHandleList);
+        CreateObjects(StairPrefab, transform, StairCount, _stairsList);
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             ActivateNextAvailableStair();
-
-            for (int h = 0; h < _scoreHandle.Count; h++)
-            {
-                if (!_scoreHandle[h].activeInHierarchy)
-                {
-                    Vector3 handlePosition = transform.position + Vector3.up * (h * ScoreHandleHight);
-                    _scoreHandle[h].transform.position = handlePosition;
-                    _scoreHandle[h].SetActive(true);
-                    _scoreHandle[h].transform.DOScale(new Vector3(1, 0.25f, 1), 0.3f).SetEase(Ease.InElastic).OnComplete(() => { _scoreHandle[h].GetComponent<BoxCollider>().enabled = true; });
-                    break;
-                }
-            }
+            ActivateNextAvailableHandle();
         }
     }
+
     private void CreateObjects(GameObject prefab, Transform transform, int prefabCount, List<GameObject> prefabList)
     {
         for (int i = 0; i < prefabCount; i++)
@@ -51,52 +38,98 @@ public class ObjectPoolingManager : MonoBehaviour
             prefabList.Add(obj);
         }
     }
+    private void ActivateNextAvailableHandle()
+    {
+        for (int h = 0; h < _scoreHandleList.Count; h++)
+        {
+            if (!_scoreHandleList[h].activeInHierarchy)
+            {
+                int scoreHandleIndex = h;
+
+                SetPositionScoreHandle(scoreHandleIndex);
+
+                SetActiveScoreHandle(scoreHandleIndex, true);
+
+                AnimationScoreHandle(scoreHandleIndex);
+
+                break;
+            }
+        }
+    }
+    private Vector3 SetPositionScoreHandle(int index)
+    {
+        Vector3 scoreHandlePosition = transform.position + Vector3.up * (index * ScoreHandleHight);
+
+        _scoreHandleList[index].transform.position = scoreHandlePosition;
+
+        return scoreHandlePosition;
+    }
+    private void AnimationScoreHandle(int index)
+    {
+        _scoreHandleList[index].transform.DOScale(new Vector3(1, 0.25f, 1), 0.3f).SetEase(Ease.InElastic);
+    }
+    private void SetActiveScoreHandle(int index, bool setActive)
+    {
+        _scoreHandleList[index].SetActive(setActive);
+    }
+
     private void ActivateNextAvailableStair()
     {
-        for (int i = 0; i < _stairs.Count; i++)
+        for (int i = 0; i < _stairsList.Count; i++)
         {
-            if (!_stairs[i].activeInHierarchy)
+            if (!_stairsList[i].activeInHierarchy)
             {
-                StairPositionAndRotationUpdate(i);
-                StairSetActive(i, true);
-                StairAnimation(i);
+                int stairIndex = i;
+
+                StairPositionAndRotationUpdate(stairIndex);
+
+                SetActiveStair(stairIndex, true);
+
+                AnimationStair(stairIndex);
                 break;
             }
         }
     }
     private void StairPositionAndRotationUpdate(int index)
     {
-        float angle = StairCalculateAngle(index);
-        Vector3 offset = StairCalculateOffset(angle);
-        Vector3 stairPosition = StairCalculatePosition(index, offset);
-        StairSetTransform(index, stairPosition, offset);
+        float angle = CalculateStairAngle(index);
+
+        Vector3 offset = CalculateStairOffset(angle);
+
+        Vector3 stairPosition = CalculateStairPosition(index, offset);
+
+        SetTransformStair(index, stairPosition, offset);
     }
-    private float StairCalculateAngle(int index)
+    private float CalculateStairAngle(int index)
     {
-        return index * (360f / _stairs.Count);
+        return index * (360f / _stairsList.Count);
     }
-    private Vector3 StairCalculateOffset(float angle)
+    private Vector3 CalculateStairOffset(float angle)
     {
         return Quaternion.Euler(0, angle, 0) * Vector3.forward;
     }
-    private Vector3 StairCalculatePosition(int index, Vector3 offset)
+    private Vector3 CalculateStairPosition(int index, Vector3 offset)
     {
         Vector3 stairPosition = transform.position + offset * CircleRadius;
+
         stairPosition.y = index * StairHight;
+
         return stairPosition;
     }
-    private void StairSetTransform(int index, Vector3 position, Vector3 offset)
+    private void SetTransformStair(int index, Vector3 position, Vector3 offset)
     {
-        Transform stairTransform = _stairs[index].transform;
+        Transform stairTransform = _stairsList[index].transform;
+
         stairTransform.position = position;
+
         stairTransform.rotation = Quaternion.LookRotation(offset);
     }
-    private void StairAnimation(int index)
+    private void AnimationStair(int index)
     {
-        _stairs[index].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InElastic).OnComplete(() => { _stairs[index].GetComponent<BoxCollider>().enabled = true; });
+        _stairsList[index].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InElastic);
     }
-    private void StairSetActive(int index, bool setActive)
+    private void SetActiveStair(int index, bool setActive)
     {
-        _stairs[index].SetActive(setActive);
+        _stairsList[index].SetActive(setActive);
     }
 }
