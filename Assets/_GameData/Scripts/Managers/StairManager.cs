@@ -1,54 +1,30 @@
-using DG.Tweening;
-using System.Collections.Generic;
+﻿using System.Reflection;
 using UnityEngine;
+using DG.Tweening;
 
 public class StairManager : MonoBehaviour
 {
-    public GameObject StairPrefab;
-    public int StairCount;
-    public float StairHeight = 0.2f;
-    public float CircleRadius = 10f;
+    public PoolManager poolManager;
+    public float circleRadius;
+    public float stairHeight;
 
-    private List<GameObject> _stairsList = new List<GameObject>();
-
+    private int _numberOfStairs;
+    private int currentStairIndex = 0;
+    private int _objectStair = 0;
     private void Start()
     {
-        CreateObjects(StairPrefab, transform, StairCount, _stairsList);
+        _numberOfStairs = poolManager.pools[_objectStair].poolSize;
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            ActivateNextAvailableStair();
+            CreateStair(currentStairIndex);
+
+            currentStairIndex++;
         }
     }
-    private void CreateObjects(GameObject prefab, Transform parent, int prefabCount, List<GameObject> prefabList)
-    {
-        for (int i = 0; i < prefabCount; i++)
-        {
-            GameObject obj = Instantiate(prefab, parent);
-            obj.SetActive(false);
-            prefabList.Add(obj);
-        }
-    }
-    private void ActivateNextAvailableStair()
-    {
-        for (int i = 0; i < _stairsList.Count; i++)
-        {
-            if (!_stairsList[i].activeInHierarchy)
-            {
-                int stairIndex = i;
-
-                StairPositionAndRotationUpdate(stairIndex);
-
-                SetActiveStair(stairIndex, true);
-
-                AnimationStair(stairIndex);
-                break;
-            }
-        }
-    }
-    private void StairPositionAndRotationUpdate(int index)
+    private void CreateStair(int index)
     {
         float angle = CalculateStairAngle(index);
 
@@ -56,11 +32,16 @@ public class StairManager : MonoBehaviour
 
         Vector3 stairPosition = CalculateStairPosition(index, offset);
 
-        SetTransformStair(index, stairPosition, offset);
+        GameObject stair = poolManager.GetPooledObject(_objectStair);
+
+        if (stair != null)
+        {
+            SetTransformStair(stair, stairPosition, offset);
+        }
     }
     private float CalculateStairAngle(int index)
     {
-        return index * (360f / _stairsList.Count);
+        return index * (360f / _numberOfStairs);
     }
     private Vector3 CalculateStairOffset(float angle)
     {
@@ -68,26 +49,18 @@ public class StairManager : MonoBehaviour
     }
     private Vector3 CalculateStairPosition(int index, Vector3 offset)
     {
-        Vector3 stairPosition = transform.position + offset * CircleRadius;
+        Vector3 stairPosition = transform.position + offset * circleRadius;
 
-        stairPosition.y = index * StairHeight;
+        stairPosition.y = index * stairHeight;
 
         return stairPosition;
     }
-    private void SetTransformStair(int index, Vector3 position, Vector3 offset)
+    private void SetTransformStair(GameObject stair, Vector3 position, Vector3 offset)
     {
-        Transform stairTransform = _stairsList[index].transform;
+        Transform stairTransform = stair.transform;
 
         stairTransform.position = position;
 
         stairTransform.rotation = Quaternion.LookRotation(offset);
-    }
-    private void AnimationStair(int index)
-    {
-        _stairsList[index].transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InElastic);
-    }
-    private void SetActiveStair(int index, bool setActive)
-    {
-        _stairsList[index].SetActive(setActive);
     }
 }

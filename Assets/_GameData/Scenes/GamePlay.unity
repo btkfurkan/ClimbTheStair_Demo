@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 460242076}
   - component: {fileID: 460242077}
   m_Layer: 0
-  m_Name: ScoreHandleManager
+  m_Name: ScoreBracketManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,14 +261,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 460242075}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f79b91f9e9d16d246bbec3760ac756e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreBracketPrefab: {fileID: 6181079657624568543, guid: 34df4249da7938d4d9a38304309f7ea3, type: 3}
   ScoreBracketCount: 100
-  ScoreBracketHeight: 0.035
+  ScoreBracketHeight: 0.05
 --- !u!65 &484103080
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -307,7 +307,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 494102787}
-  - component: {fileID: 494102788}
+  - component: {fileID: 494102789}
   m_Layer: 0
   m_Name: StairManager
   m_TagString: Untagged
@@ -329,7 +329,7 @@ Transform:
   m_Father: {fileID: 1224818724}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &494102788
+--- !u!114 &494102789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,13 +338,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 494102786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9940008f7e8e6446a636fe4b1688f92, type: 3}
+  m_Script: {fileID: 11500000, guid: e0c2f9f5133d44e4fa27c9a392939d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StairPrefab: {fileID: 5244259088661482879, guid: d3c4954cbbaef214f978667ef49f7ffb, type: 3}
-  StairCount: 100
-  StairHeight: 0.035
-  CircleRadius: 1.1
+  poolManager: {fileID: 1224818723}
+  circleRadius: 0.9
+  stairHeight: 0.05
+--- !u!1 &711084326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 711084327}
+  - component: {fileID: 711084328}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &711084327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711084326}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.28275895, y: -0.5232521, z: -14.063771}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &711084328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711084326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7502bb90176d5d8418cc578b5d0564c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - audioSource: {fileID: 0}
+    Clip: {fileID: 0}
+    Name: 
+    Loop: 0
+    Volume: 0
+    Pitch: 0
 --- !u!1 &845622222
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +485,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &969790634
 GameObject:
@@ -516,12 +565,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969790634}
-  m_LocalRotation: {x: 0.00007443389, y: -0.9998024, z: 0.019802615, w: -0.0017657714}
-  m_LocalPosition: {x: 0.2761421, y: 2.3939126, z: 1.7636802}
+  m_LocalRotation: {x: 0.0031600997, y: -0.98311186, z: 0.18225473, w: 0.016256405}
+  m_LocalPosition: {x: -0.05925232, y: 2.3677268, z: 0.3350582}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &969790638
 MonoBehaviour:
@@ -563,7 +612,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969790634}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc50bf8ae2869ec4199c139e110f3d29, type: 3}
   m_Name: 
@@ -634,7 +683,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1224818722
 GameObject:
@@ -660,18 +709,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224818722}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d294afcaf58d6d4c90adf4fb414a043, type: 3}
+  m_Script: {fileID: 11500000, guid: 8de11ec329ba05a4a86a41d281843052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreHandlePrefab: {fileID: 0}
-  StairPrefab: {fileID: 0}
-  StairCount: 0
-  ScoreHandleCount: 0
-  ScoreHandleHight: 0.2
-  StairHight: 0.2
-  CircleRadius: 10
+  pools:
+  - objectPrefab: {fileID: 5244259088661482879, guid: d3c4954cbbaef214f978667ef49f7ffb, type: 3}
+    poolSize: 50
+    poolTransform: {fileID: 494102787}
+  - objectPrefab: {fileID: 6181079657624568543, guid: 34df4249da7938d4d9a38304309f7ea3, type: 3}
+    poolSize: 50
+    poolTransform: {fileID: 460242076}
 --- !u!4 &1224818724
 Transform:
   m_ObjectHideFlags: 0
@@ -686,7 +735,7 @@ Transform:
   - {fileID: 494102787}
   - {fileID: 460242076}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1281727577
 GameObject:
@@ -881,7 +930,7 @@ Transform:
   m_Children:
   - {fileID: 1904408588}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904408587
 GameObject:
@@ -1009,7 +1058,7 @@ Transform:
   m_Children:
   - {fileID: 444958954}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7355870757089917580
 MeshFilter:
@@ -1072,7 +1121,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &7355870757089917682
 MeshCollider:
@@ -1240,5 +1289,5 @@ Transform:
   m_LocalScale: {x: 1.4, y: 2, z: 1.5}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
