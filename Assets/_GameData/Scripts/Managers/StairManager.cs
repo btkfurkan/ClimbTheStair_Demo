@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class StairManager : MonoBehaviour
 {
-    [Header("Basamak Ayarları")]
+    [Header("Stair Settings")]
     [SerializeField] private PoolManager poolManager;
 
     public float circleRadius;
@@ -12,6 +12,7 @@ public class StairManager : MonoBehaviour
     private int _numberOfStairs;
     private int currentStairIndex = 0;
     private int _objectStair = 0;
+    private Transform _currentStairTransform;
     private void Start()
     {
         _numberOfStairs = poolManager.pools[_objectStair].poolSize;
@@ -38,6 +39,7 @@ public class StairManager : MonoBehaviour
         if (stair != null)
         {
             SetTransformStair(stair, stairPosition, offset);
+            EventManager.Instance.RaiseStairPlaced(stairPosition, _currentStairTransform.right);
         }
     }
     private float CalculateStairAngle(int index)
@@ -58,10 +60,10 @@ public class StairManager : MonoBehaviour
     }
     private void SetTransformStair(GameObject stair, Vector3 position, Vector3 offset)
     {
-        Transform stairTransform = stair.transform;
+        _currentStairTransform = stair.transform;
 
-        stairTransform.position = position;
+        _currentStairTransform.position = position;
 
-        stairTransform.rotation = Quaternion.LookRotation(offset);
+        _currentStairTransform.rotation = Quaternion.LookRotation(offset);
     }
 }

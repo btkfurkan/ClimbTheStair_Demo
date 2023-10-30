@@ -1,10 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class ScoreBoardManager : MonoBehaviour
 {
-    [Header("Skor Tabelasý Ayarlarý")]
+    [Header("Score Table Settings")]
     [SerializeField] private PoolManager poolManager;
     [SerializeField] private GameObject scoreTable;
 
@@ -31,7 +30,7 @@ public class ScoreBoardManager : MonoBehaviour
         {
             scoreBoard.transform.position = SetPositionScoreBoard(index);
 
-            this.scoreTable.transform.DOMoveY(scoreBoard.transform.position.y + offsetTable, animationDuration);
+            scoreTable.transform.DOMoveY(scoreBoard.transform.position.y + offsetTable, animationDuration);
         }
     }
     private Vector3 SetPositionScoreBoard(int index)
