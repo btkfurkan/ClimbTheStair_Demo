@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -9,11 +7,12 @@ public class AudioManager : MonoBehaviour
     public AudioItem[] sounds;
     public static AudioManager instance;
 
-    public void Awake()
+    private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -21,53 +20,48 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-    }
-    public void Start()
-    {
-        foreach (AudioItem sound in sounds)
-        {
-            sound.audioSource = gameObject.AddComponent<AudioSource>();
-            sound.audioSource.clip = sound.Clip;
-
-            sound.audioSource.name = sound.Name;
-            sound.audioSource.volume = sound.Volume;
-            sound.audioSource.pitch = sound.Pitch;
-            sound.audioSource.loop = sound.Loop;
-        }
-    }
+        SetupAudioSources();
+    }  
     public void Play(string name)
     {
         AudioItem sound = Array.Find(sounds, sound => sound.Name == name);
         if (sound == null)
         {
-            print("Ses : " + name + " bulanamdý!");
+            Debug.LogWarning("Ses: " + name + " bulunamadý!");
             return;
         }
 
         sound.audioSource.Play();
     }
-    public void PlayOne(AudioClip clip)
-    {
-        AudioItem sound = Array.Find(sounds, sound => sound.Name == name);
-        if (sound == null)
-        {
-            print("Ses : " + name + " bulanamdý!");
-            return;
-        }
-
-        sound.audioSource.PlayOneShot(clip);
-    }
-
     public void Stop(string name)
     {
         AudioItem sound = Array.Find(sounds, sound => sound.Name == name);
         if (sound == null)
         {
-            print("Ses : " + name + " bulanamdý!");
+            Debug.LogWarning("Ses: " + name + " bulunamadý!");
+            return;
         }
 
         sound.audioSource.Stop();
+    }
+    private void SetupAudioSources()
+    {
+        foreach (AudioItem sound in sounds)
+        {
+            sound.audioSource = CreateAudioSource(sound);
+        }
+    }
+
+    private AudioSource CreateAudioSource(AudioItem sound)
+    {
+        AudioSource audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.clip = sound.Clip;
+        audioSource.name = sound.Name;
+        audioSource.volume = sound.Volume;
+        audioSource.pitch = sound.Pitch;
+        audioSource.loop = sound.Loop;
+
+        return audioSource;
     }
 }
 

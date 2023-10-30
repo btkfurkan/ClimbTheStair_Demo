@@ -1,10 +1,11 @@
-﻿using System.Reflection;
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 
 public class StairManager : MonoBehaviour
 {
-    public PoolManager poolManager;
+    [Header("Basamak Ayarları")]
+    [SerializeField] private PoolManager poolManager;
+
     public float circleRadius;
     public float stairHeight;
 
