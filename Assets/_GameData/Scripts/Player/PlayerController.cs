@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
         transform.position = stairPosition;
         transform.rotation = Quaternion.LookRotation(stairRotation);
         _animatorController.PlayAnim(PlayerAnimationController.Climb);
-        DOVirtual.DelayedCall(.25f, () =>
+        DOVirtual.DelayedCall(.50f, () =>
         {
             _animatorController.PlayAnim(PlayerAnimationController.Idle);
         });

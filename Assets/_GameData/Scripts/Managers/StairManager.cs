@@ -28,17 +28,21 @@ public class StairManager : MonoBehaviour
     }
     private void CreateStair(int index)
     {
+        #region Set Transform
         float angle = CalculateStairAngle(index);
 
         Vector3 offset = CalculateStairOffset(angle);
 
         Vector3 stairPosition = CalculateStairPosition(index, offset);
 
+        #endregion
+
         GameObject stair = poolManager.GetPooledObject(_objectStair);
 
         if (stair != null)
         {
             SetTransformStair(stair, stairPosition, offset);
+
             EventManager.Instance.RaiseStairPlaced(stairPosition, _currentStairTransform.right);
         }
     }
