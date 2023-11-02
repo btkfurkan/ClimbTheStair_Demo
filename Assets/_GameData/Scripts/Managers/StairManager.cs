@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using DG.Tweening;
 
 public class StairManager : MonoBehaviour
 {
     [Header("Stair Settings")]
     [SerializeField] private PoolManager poolManager;
 
-    public float circleRadius;
-    public float stairHeight;
+    public float CircleRadius;
+    public float StairHeight;
 
+    private bool _isGameActive;
     private int _numberOfStairs;
     private int currentStairIndex = 0;
     private int _objectStair = 0;
@@ -19,10 +19,12 @@ public class StairManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        _isGameActive = MenuController.Instance.GetGameState();
+        if (!_isGameActive) return;
+
+        if (Input.GetMouseButtonDown(0) && _isGameActive)
         {
             CreateStair(currentStairIndex);
-
             currentStairIndex++;
         }
     }
@@ -56,9 +58,9 @@ public class StairManager : MonoBehaviour
     }
     private Vector3 CalculateStairPosition(int index, Vector3 offset)
     {
-        Vector3 stairPosition = transform.position + offset * circleRadius;
+        Vector3 stairPosition = transform.position + offset * CircleRadius;
 
-        stairPosition.y = index * stairHeight;
+        stairPosition.y = index * StairHeight;
 
         return stairPosition;
     }

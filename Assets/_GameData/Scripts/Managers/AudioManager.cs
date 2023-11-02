@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    [Header("Ses Ayarlarý")]
+    [Header("Audio Settings")]
+
     public AudioItem[] sounds;
-    public static AudioManager instance;
+    public static AudioManager Instance;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -51,7 +52,6 @@ public class AudioManager : MonoBehaviour
             sound.audioSource = CreateAudioSource(sound);
         }
     }
-
     private AudioSource CreateAudioSource(AudioItem sound)
     {
         AudioSource audioSource = gameObject.AddComponent<AudioSource>();

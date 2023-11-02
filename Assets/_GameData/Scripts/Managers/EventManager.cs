@@ -9,10 +9,12 @@ public class EventManager : MonoBehaviour
     {
         Instance = this;
     }
-
     public event Action<Vector3, Vector3> OnStairPlaced;
     public void RaiseStairPlaced(Vector3 stairPosition, Vector3 stairRotation) => OnStairPlaced?.Invoke(stairPosition, stairRotation);
 
-    public event Action OnGameFailed;
-    public void RaiseGameFailed() => OnGameFailed?.Invoke();
+    public event Action OnOpenChestAnimation;
+    public void RaiseOpenChest() => OnOpenChestAnimation?.Invoke();
+
+    public event Action OnGameStarted;
+    public void RaiseGameStarted() => OnGameStarted?.Invoke();
 }

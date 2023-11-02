@@ -8,14 +8,17 @@ public class ScoreBoardManager : MonoBehaviour
     [SerializeField] private GameObject scoreTable;
 
     public float ScoreBoardHeight;
-    public float offsetTable;
-    public float animationDuration;
+    public float OffsetTable;
+    public float AnimationDuration;
 
+    private bool _isGameActive;
     private int _objectScoreBoard = 1;
     private int _currentBoardIndex = 0;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        _isGameActive = MenuController.Instance.GetGameState();
+
+        if (Input.GetKeyDown(KeyCode.Space) && _isGameActive)
         {
             CreateScoreBoard(_currentBoardIndex);
 
@@ -30,7 +33,7 @@ public class ScoreBoardManager : MonoBehaviour
         {
             scoreBoard.transform.position = SetPositionScoreBoard(index);
 
-            scoreTable.transform.DOMoveY(scoreBoard.transform.position.y + offsetTable, animationDuration);
+            scoreTable.transform.DOMoveY(scoreBoard.transform.position.y + OffsetTable, AnimationDuration);
         }
     }
     private Vector3 SetPositionScoreBoard(int index)

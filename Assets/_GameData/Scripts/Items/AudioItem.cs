@@ -3,7 +3,6 @@ using UnityEngine;
 [System.Serializable]
 public class AudioItem
 {
-
     [HideInInspector] public AudioSource audioSource;
 
     public AudioClip Clip;
